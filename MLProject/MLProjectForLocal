@@ -1,6 +1,6 @@
 name: adult_income_project
 
-python_env: conda.yaml
+python_env: requirements.txt
 
 entry_points:
   main:
