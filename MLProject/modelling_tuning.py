@@ -44,7 +44,7 @@ grid_search = GridSearchCV(
     n_jobs=-1
 )
 
-with mlflow.start_run(nested=True):
+with mlflow.start_run(nested=(mlflow.active_run() is not None)):
     grid_search.fit(X_train_scaled, y_train)
     best_model = grid_search.best_estimator_
 
