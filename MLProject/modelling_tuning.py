@@ -7,6 +7,10 @@ import mlflow
 import mlflow.sklearn
 import argparse
 
+import os
+
+mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns"))
+
 # Baca data
 # df = pd.read_csv('adult_preprocessing/adult_preprocessed.csv')
 
