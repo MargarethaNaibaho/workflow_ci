@@ -8,8 +8,7 @@ import mlflow.sklearn
 import argparse
 
 import os
-
-mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns"))
+mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns")) 
 
 # Baca data
 # df = pd.read_csv('adult_preprocessing/adult_preprocessed.csv')
@@ -45,7 +44,7 @@ grid_search = GridSearchCV(
     n_jobs=-1
 )
 
-with mlflow.start_run():
+with mlflow.start_run(nested=True):
     grid_search.fit(X_train_scaled, y_train)
     best_model = grid_search.best_estimator_
 
