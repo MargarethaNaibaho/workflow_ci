@@ -23,5 +23,10 @@ jobs:
     - name: Install MLflow globally
       run: pip install mlflow
 
+    - name: Setup Conda shell integration
+      shell: bash -l {0}
+      run: echo "Preparing conda shell"
+
     - name: Run MLflow Project
+      shell: bash -l {0}
       run: mlflow run MLProject
