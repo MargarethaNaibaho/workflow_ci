@@ -1,0 +1,10 @@
+name: adult_income_project
+
+python_env: requirements.txt
+
+entry_points:
+  main:
+    parameters:
+      data_path: {type: str, default: "adult_preprocessing/adult_preprocessed.csv"}
+    command: >
+      python modelling_tuning.py --data_path {data_path}

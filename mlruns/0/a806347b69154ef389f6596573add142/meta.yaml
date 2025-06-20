@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/laskarai/sistem%20machine%20learning/Workflow_CI/mlruns/0/a806347b69154ef389f6596573add142/artifacts
+end_time: 1750390653947
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: a806347b69154ef389f6596573add142
+run_name: selective-worm-535
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750390624765
+status: 3
+tags: []
+user_id: LENOVO
