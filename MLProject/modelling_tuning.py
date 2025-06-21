@@ -6,30 +6,30 @@ from sklearn.preprocessing import StandardScaler
 import mlflow
 import mlflow.sklearn
 import argparse
-
 import os
-mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns")) 
 
-# Baca data
-# df = pd.read_csv('adult_preprocessing/adult_preprocessed.csv')
+# Atur tracking ke direktori lokal
+mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns"))
 
+# Ambil argumen
 parser = argparse.ArgumentParser()
 parser.add_argument("--data_path", type=str, required=True)
 args = parser.parse_args()
 
+# Load data
 df = pd.read_csv(args.data_path)
 X = df.drop('income', axis=1)
 y = df['income']
 
-# Split data
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+# Split dan normalisasi
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y)
 
-# Normalisasi fitur
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Tuning Hyperparameter
+# Setup grid search
 param_grid = {
     'C': [0.01, 0.1, 1.0, 10.0],
     'penalty': ['l2'],
@@ -44,14 +44,14 @@ grid_search = GridSearchCV(
     n_jobs=-1
 )
 
-with mlflow.start_run(nested=(mlflow.active_run() is not None)):
+# Fungsi utama untuk training dan log
+def run_training():
     grid_search.fit(X_train_scaled, y_train)
     best_model = grid_search.best_estimator_
 
     y_pred = best_model.predict(X_test_scaled)
     acc = accuracy_score(y_test, y_pred)
 
-    # Logging manual ke MLflow
     mlflow.log_params(grid_search.best_params_)
     mlflow.log_metric("accuracy", acc)
     mlflow.sklearn.log_model(best_model, "model")
@@ -60,3 +60,10 @@ with mlflow.start_run(nested=(mlflow.active_run() is not None)):
     print(confusion_matrix(y_test, y_pred))
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred))
+
+# Cek apakah sudah ada run aktif atau belum
+if mlflow.active_run() is None:
+    with mlflow.start_run():
+        run_training()
+else:
+    run_training()
