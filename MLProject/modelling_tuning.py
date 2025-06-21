@@ -8,8 +8,9 @@ import mlflow.sklearn
 import argparse
 import os
 
-# Atur tracking ke direktori lokal
-mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns"))
+# 🧠 Hanya set tracking URI kalau belum di-set oleh MLflow run
+if mlflow.get_tracking_uri() == "file:///default/artifact/root":
+    mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns"))
 
 # Ambil argumen
 parser = argparse.ArgumentParser()
@@ -61,7 +62,7 @@ def run_training():
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred))
 
-# Cek apakah sudah ada run aktif atau belum
+# Jalankan dalam MLflow run
 if mlflow.active_run() is None:
     with mlflow.start_run():
         run_training()
